@@ -26,25 +26,34 @@ app.get('/', async (req, res) => {
 
 
 // http://localhost:5000/getCompletion?text=Hola mundo
-app.post("/chat", async(req, res, next) => {
+app.post("/", async(req, res, next) => {
      
-     const prompt = req.body.prompt;
-     
-     const options = {
-        method: 'POST',
-        url: 'https://you-chat-gpt.p.rapidapi.com/TextOnly',
-        headers: {
-            'content-type': 'application/json',
-            'X-RapidAPI-Key': '42d3baef34msh99573537c1591c4p1a10b3jsn3b305e04d1a1',
-            'X-RapidAPI-Host': 'you-chat-gpt.p.rapidapi.com'
-        },
-        data: '{"question":"list 10 ways to become a better programmer?","max_response_time":10}'
-     };
+     const { prompt } = req.body;
+     console.log("question:", prompt);
+    const data = {"question":prompt,"max_response_time":10}
 
-    try {
-        console.log(req);
-        const res = await axios.request(options);
-        res.json(res.data);
+    const options = {
+        method: 'POST',
+        url: 'https://you-chat-gpt.p.rapidapi.com/',
+        headers: {
+          'content-type': 'application/json',
+          'X-RapidAPI-Key': '4311cea42bmshc97489894266b05p102e3bjsn6f8224244be9',
+          'X-RapidAPI-Host': 'you-chat-gpt.p.rapidapi.com'
+        },
+        data: data
+      };
+      
+    //   axios.request(options).then(function (response) {
+    //       console.log(response.data);
+    //   }).catch(function (error) {
+    //       console.error(error);
+    //   });
+
+      try {
+        
+        const res1 = await axios.request(options);
+        console.log("answer:",res1.data.answer)
+        res.send(res1.data.answer);
       }
       catch (err) {
         next(err)
